@@ -1,0 +1,65 @@
+##Mounting Drive & Downloading Dataset##
+
+from google.colab import drive
+drive.mount('/content/drive')
+
+!mkdir -p /content/oilspill_dataset
+!wget -q https://zenodo.org/records/10555314/files/dataset.zip -O /content/oilspill_dataset/dataset.zip
+!unzip -q /content/oilspill_dataset/dataset.zip -d /content/oilspill_dataset/
+print("✅ Dataset ready in /content/oilspill_dataset/")
+
+
+###Checking Dataset Structure###
+
+import os
+base_path = "/content/oilspill_dataset"
+for split in ["train", "val", "test"]:
+    images = os.path.join(base_path, split, "images")
+    masks  = os.path.join(base_path, split, "masks")
+    print(f"{split.upper()} → {len(os.listdir(images))} images | {len(os.listdir(masks))} masks")
+
+
+###Visualizing Sample Images + Masks###
+
+import random, cv2, matplotlib.pyplot as plt
+
+train_img_dir  = "/content/oilspill_dataset/train/images"
+train_mask_dir = "/content/oilspill_dataset/train/masks"
+
+img_files  = sorted(os.listdir(train_img_dir))
+mask_files = sorted(os.listdir(train_mask_dir))
+sample_ids = random.sample(range(len(img_files)), 3)
+
+plt.figure(figsize=(12,6))
+for i, idx in enumerate(sample_ids):
+    img  = cv2.imread(os.path.join(train_img_dir, img_files[idx]))
+    img  = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+
+    mask = cv2.imread(os.path.join(train_mask_dir, mask_files[idx]), cv2.IMREAD_GRAYSCALE)
+
+    plt.subplot(3,2,2*i+1); plt.imshow(img); plt.title("Image"); plt.axis("off")
+    plt.subplot(3,2,2*i+2); plt.imshow(mask, cmap="gray"); plt.title("Mask"); plt.axis("off")
+
+plt.tight_layout(); plt.show()
+
+###Preprocessing Functions###
+import numpy as np
+
+img_size = (256, 256)
+
+def preprocess_image(path):
+    img = cv2.imread(path)
+    img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+    img = cv2.resize(img, img_size)
+    img = img / 255.0
+    return img
+
+def preprocess_mask(path):
+    mask = cv2.imread(path, cv2.IMREAD_GRAYSCALE)
+    mask = cv2.resize(mask, img_size)
+    mask = mask / 255.0
+    mask = np.expand_dims(mask, axis=-1)
+    return mask
+
+
+##
