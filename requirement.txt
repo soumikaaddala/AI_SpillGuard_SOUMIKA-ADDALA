@@ -1,0 +1,13 @@
+streamlit
+tensorflow
+numpy
+opencv-python
+pillow
+matplotlib
+scikit-learn
+torch
+torchvision
+monai
+transformers
+datasets
+patchify
