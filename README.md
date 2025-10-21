@@ -1,3 +1,13 @@
+
+
+⚠️ **Important Note:**
+I have worked on **two models** – **SAM** and **U-Net**.
+This repository primarily contains the **U-Net** implementation for oil spill segmentation.
+However, the **best-performing model** is the **SAM (Segment Anything Model)**.
+You can check out the SAM model and its results here: 🌐 [**SAM Model Link**](https://github.com/soumikaaddala/Infosys_Ai_Oil_Spill/tree/main)
+
+
+
 🌊 Oil Spill Segmentation using U-Net
 
 This project uses a U-Net deep learning model to detect and segment oil spills from satellite images.
